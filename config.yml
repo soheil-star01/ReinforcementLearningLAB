@@ -1,2 +1,9 @@
 core:
   PRICE_DATA_PATH: historical_data
+mongodb:
+  HOST: localhost
+  PORT: 27017
+  DB: ReinforcementLearningLAB
+api:
+  HOST: d
+  PORT: d
