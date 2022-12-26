@@ -22,14 +22,19 @@ def retrieve_from_db(ticker_name: str,
 def get_hourly_price(ticker_name: str,
                      market: str,
                      store_as_file: bool = False) -> pd.DataFrame:
-    ticker_obj = yf.Ticker(ticker=ticker_name if market == 'stock' else ticker_name + '-USD')
+    ticker_obj = yf.Ticker(ticker=(ticker_name if market == 'stock'
+                                   else ticker_name + '-USD'))
     df_price = ticker_obj.history(period='2mo',
                                   interval='1h')
-    df_price = df_price[['Open', 'High', 'Low', 'Close', 'Volume']].reset_index()
+    df_price = df_price[['Open', 'High',
+                         'Low', 'Close',
+                         'Volume']].reset_index()
     df_price['Market'] = market
     df_price['Ticker'] = ticker_name
     df_price['Resolution'] = '1h'
-    last_price = retrieve_from_db(ticker_name, market, last_one=True)
+    last_price = retrieve_from_db(ticker_name,
+                                  market,
+                                  last_one=True)
     if not last_price.empty:
         price_collection.insert_many(
             df_price[df_price['Datetime'] > last_price['Datetime'].tz_localize('utc')].to_dict('records')
@@ -37,7 +42,9 @@ def get_hourly_price(ticker_name: str,
     else:
         price_collection.insert_many(df_price.to_dict('records'))
     if store_as_file:
-        df_price.to_pickle(f"{configs.configs_dict['core']['PRICE_DATA_PATH']}/{ticker_name}_{market}.pkl")
+        df_price.to_pickle(
+            f"{configs.configs_dict['core']['PRICE_DATA_PATH']}/{ticker_name}_{market}.pkl"
+        )
     return df_price
 
 
