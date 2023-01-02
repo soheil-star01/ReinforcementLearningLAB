@@ -1,6 +1,3 @@
-
-
-
 class Market:
     def __init__(self, price_data):
         self.bot = BotTrader()
@@ -31,12 +28,13 @@ class Market:
 
         self.step_count += 1
 
-        if self.step_count >= len(self.price_data)
+        if self.step_count >= len(self.price_data):
             self.done = True
         else:
             self.new_observation = self.price_data.iloc[self.step_count]
 
         return self.done, self.new_observation, reward
+
 
 class BotTrader:
     def __init__(self):
